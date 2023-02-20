@@ -5,8 +5,8 @@ Eine Präsentation zur nichtflüchtigen Datenspeicherung in integrierten Systeme
 
 - Motivation der & Einführung in die SD-Karte
 - Hardware-Aspekte
-- Software-Aspekte (Arduino `SD.h`)
-- Beispiel Projekt &ndash; Die Wetterstation
+- Software-Lösungen (Arduino `SD.h`)
+- Beispiel Projekt &ndash; die Wetterstation
 
 
 ![micro-sd card](/media/title_edit.jpg)
