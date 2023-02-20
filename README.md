@@ -3,7 +3,7 @@
 
 Eine Präsentation zur nichtflüchtigen Datenspeicherung in integrierten Systemen :floppy_disk::
 
-- Motivation der & Einführung in die SD-Karte
+- Motivation & Einführung der SD-Karte
 - Hardware-Aspekte
 - Software-Lösungen (Arduino `SD.h`)
 - Beispiel Projekt &ndash; die Wetterstation
