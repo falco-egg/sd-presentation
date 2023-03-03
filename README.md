@@ -27,5 +27,5 @@ Zum Bau der Bibliografie wird ebenfalls `biber` gebraucht.
 
 GNU `make` baut mit der [Makefile](Makefile) vollautomatisch die Präsentation und das Handout als PDF:
 
-`$ git clone https://github.com/falco-egg/sd-presentation && cd sd-presentation`
+`$ git clone https://github.com/falco-egg/sd-presentation && cd sd-presentation`  
 `$ make`
