@@ -21,7 +21,7 @@ Dazu werden außerdem die "Arduino-SD", "Adafruit-HDC1000" und "Adafruit-BMP280"
 
 Die Präsentation und das Handout sind in LaTeX geschrieben.
 Eine TeX Distribution wie `texlive`, sowie eine Anzahl an [ctan](https://ctan.org/?lang=en) Packeten werden benötigt.
-Zum Bau der Bibliografie wird ebenfalls `biber` gebraucht.
+Zum Bau der Bibliografie muss ebenfalls `biber` vorhanden sein.
 
 ### linux
 
