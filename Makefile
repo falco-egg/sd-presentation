@@ -25,13 +25,14 @@ open-handout: handout.pdf
 	fi
 
 handout.pdf: handout.tex
-	$(TEX) $< draftmode
+	$(TEX) $< -draftmode
 	$(BIB) handout
 	$(TEX) $< -jobname=$@
 
 presentation.pdf: presentation.tex
-	$(TEX) $< draftmode
+	$(TEX) $< -draftmode
 	$(BIB) presentation
+	$(TEX) $< -draftmode
 	$(TEX) $< -jobname=$@
 
 clean:
