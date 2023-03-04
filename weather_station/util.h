@@ -29,11 +29,7 @@ class logger {
     };
 
     ~logger() {
-      sdFile.close();
-      if (filename) {
-        delete[] filename;
-        filename = 0;
-      }
+      sd_close();
     }
 
     template<typename T>
