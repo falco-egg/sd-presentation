@@ -56,7 +56,7 @@ class logger {
         Serial.flush();
         dump.close();
       }
-      else {
+      else if (serial) {
         Serial.println("couldn't dump log");
       }
 

@@ -1,5 +1,4 @@
 File datei = SD.open("datei.txt", FILE_WRITE);
-
 if (datei) {
   datei.println("Hallo, SD-Karte!");
   datei.close();
