@@ -27,6 +27,9 @@ Zum Bau der Bibliografie muss ebenfalls `biber` vorhanden sein.
 
 GNU `make` baut mit der [Makefile](Makefile) vollautomatisch die Präsentation und das Handout als PDF:
 
+arch: `pacman -Syu texlive-most biber`
+debian: `apt install texlive-latex-extra biber` (untested)
+
 ```
 $ git clone https://github.com/falco-egg/sd-presentation && cd sd-presentation
 $ make
