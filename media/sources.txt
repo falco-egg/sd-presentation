@@ -18,5 +18,3 @@ self made:
     shield.jpg *
         - photograph of: Watterott electronic - sensebox Shield (https://learn.watterott.com/sensebox/shield/)
     title_edit.jpg
-    transflash.png *
-        - base image may or may not be stolen
