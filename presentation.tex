@@ -8,43 +8,26 @@
 ]{doclicense}
 
 % \setbeameroption{show only notes} % Only notes
-% \setbeameroption{show notes on second screen=right} % Both
-
-\setbeamertemplate{section in toc}{%
-  \leavevmode%
-  \hspace{.42\textwidth}
-  \llap{%
-    \hbox to2.25ex{\hfil\usebeamercolor[fg]{background}{\tikz[baseline=-.75ex]{\fill (0,0) circle (.5ex)}\hfil}}
-  }%
-  \kern1.25ex\inserttocsection\par%
-}
-
-\newcommand{\FramedSection}[1]{
-  \section{{#1}}%
-  \begin{frame}%
-    \vfill\begin{beamercolorbox}[sep=12pt, center]{title}%
-      \usebeamerfont{title}{#1}\par%
-    \end{beamercolorbox}\vfill%
-  \end{frame}%
-}
+\setbeameroption{show notes on second screen=right} % Both
 
 \usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
 \addbibresource{ref.bib}
 \renewcommand*{\bibfont}{\scriptsize}
 
-% \usepackage{todonotes}
+\newsavebox{\longestsec}
 
-\date{2023-02-21}
+\date{2023-03-07}
 \author{C. Badermann}
 \title{Die Speicherkarte}
 \subtitle{Kompakter Speicher mit großem Potenzial; der vertraute Gefährte der Datenaggregation}
 
 \begin{document}
+  \Large
 
   \section{Prolog}%
   \subsection{Titelfolie}%
   \begin{frame}
-    \titlepage
+    \maketitle~\\
 
     \begin{center}
       \includegraphics[height=8em]{media/title_edit.jpg}
@@ -53,21 +36,30 @@
 
   \subsection{Inhaltsverzeichnis}%
   \begin{frame}
-      \tableofcontents[hideallsubsections]
+    % interline spacing is broken here, but I can't figure out how to fix :wah:
+    % this is why nesting hacks is generally a bad idea
+    \begin{multicols}{2}
+      \setcounter{tocdepth}{1}
+      \begin{lrbox}{\longestsec}Beispiel Projekt\end{lrbox}% Capture longest title
+      \setlength{\leftskip}{\dimexpr.5\linewidth-.5\wd\longestsec\relax}
+      \setlength{\lineskiplimit}{-200pt}
+      \tableofcontents
+      \setcounter{tocdepth}{3}
+    \end{multicols}
 
     \note{
-      - Motivation \& Einleitung der MicroSD-Karte\\
+      - Motivation \& Einleitung der microSD-Karte\\
       - Hardware-Aspekt\\
-      - Software-Lösungen (ordnungsgemäßen Formatierung, Bibliotheken und deren Funktionen)\\
+      - Software-Lösungen (ordnungsgemäße Formatierung, Bibliotheken und deren Funktionen)\\
       - Beispielprojekt (Konstruktion nach Beschreibung, Software Design \& Programmierung, Datenanalyse)
     }
   \end{frame}
 
   \FramedSection{Die SD-Karte}%
   \subsection{Motivation}%
-  \begin{frame}<1>[label=motivation]
+  \begin{frame}<1,2>[label=motivation]
     \usebeamercolor[fg]{structure}
-    \only<2>{
+    \only<3>{
       \begin{center}
         \textbf{Zur Erinnerung:}
       \end{center}
@@ -75,17 +67,20 @@
     \usebeamercolor[fg]{normal text}
 
     \only<1>{\textbf{Szenario:}\\}
-    Mithilfe der Arduino Plattform soll eine Wetterstation konstruiert werden. Gemessen werden Temperatur, Luftfeuchtigkeit und Luftdruck, mithilfe der \enquote{\texttt{HDC100x}} und \enquote{\texttt{BMP280}} Sensormodule.
-    Zur Auswertung, sollen die über einen längeren Zeitraum gemessenen Datenpunkte aggregiert und auf einen persönlichen Computer übertragen werden\cite{EnergyLab-Wettermessstation}.\\~\\
+    \only<1,3>{
+      Eine Wetterstation soll konstruiert werden:\\
+      Messung von Temperatur, Luftfeuchtigkeit und Luftdruck, mithilfe der \enquote{\texttt{HDC100x}} und \enquote{\texttt{BMP280}} Sensoren;
+      Auswertung aggregierter Daten am Computer\cite{EnergyLab-Wettermessstation}.
+    }
     \only<1>{\note{
       Szenario:\\
       Wettermessstation, Aggregation auf Speichermedium, Auswertung am PC.\\~\\
     }}
 
-    \only<1>{\textbf{Erwünschte Fähigkeiten des Speicher- \& Übertragungsmedium:}
+    \only<2>{\textbf{Erwünschte Fähigkeiten des Speichermediums:}
     \begin{itemize}
       \item Nichtflüchtige \& alleinstehende Speicherung
-      \item Einfacher Transfer von eingelesenen Daten auf andere Systeme
+      \item Einfacher Transfer von Daten auf andere Systeme
       \item Großes Speichervolumen
     \end{itemize}
     \note{
@@ -96,8 +91,8 @@
 
   \subsection{SD \& SDA}%
   \begin{frame}
-    Ein geeignetes Speichermedium für dieses Szenario ist die microSD-Karte.
-    Diese ist das physisch kleinste Mitglied der Familie der SD-Karten, \href{https://de.wikipedia.org/wiki/Flash-Speicher}{Flash-EEPROM} nach Standard der \enquote{SD Association}.\\~\\
+    Ein geeignetes Medium für dieses Szenario: die microSD-Karte:\\
+    \tsec{(\href{https://de.wikipedia.org/wiki/Flash-Speicher}{Flash-EEPROM} nach Standard der \enquote{SD Association})}\\~\\
 
     \textbf{Qualitäten:}
     \begin{itemize}
@@ -106,7 +101,7 @@
       \item Kompakter Formfaktor
       \item Simple SPI Schnittstelle
       \item Müheloses Einführen, Entfernen
-      \item Verfügbarkeit von Anschlüssen für den Arduino und andere Systeme
+      \item Verfügbarkeit von Anschlüssen für Arduino und andere Systeme
     \end{itemize}
 
     \note {
@@ -119,14 +114,14 @@
   \end{frame}
 
   \begin{frame}
-    SD-Karten ermöglichen die Nichtflüchtige Speicherung von Daten.
+    SD-Karten ermöglichen die nichtflüchtige Speicherung von Daten.
     Diese sind als Dateien in einem Ordersystem organisiert.\\~\\
 
     \textbf{Obacht:}
     \begin{itemize}
-      \item \enquote{\texttt{SD.h}} unterstützt nur bestimmte Karten\cite{sd-lib}
+      \item Der Arduino unterstützt nur bestimmte Karten\cite{sd-lib}
       \item Flash-Speicher verfügt über endlich viele Schreibzyklen\cite{zhang2017flash,sd-lifespan}
-      \item SD-Karten sind leicht zu verlegen und können ohne Weiteres entwendet werden
+      \item SD-Karten sind leicht zu verlegen und entwenden
       \item Es gibt leistungsfähigeren Speicher
       \item SD ist ein proprietärer Standard\cite{sd-proprietary}
     \end{itemize}
@@ -141,14 +136,9 @@
   \begin{frame}
     \begin{columns}[c]
       \begin{column}{.6\linewidth}
-        Die Hardware von (micro-) SD Karten ist durch einen Standard der \enquote{SD Association} festgelegt.
-        Dieser Spezifiziert z.B.: Funktionsweise \& Dimensionen der Produkte, welche unter dem \emph{SD} Warenzeichen verkauft werden dürfen.\\~\\
+        Ein Standard der \enquote{SD Association} bestimmt welche Karten unter dem \emph{SD} Warenzeichen verkauft werden dürfen.\\~\\
 
-        In miroSD-Karten sind Maße von etwa 11x15x1{mm}, sowie eine wohl definierte Schnittstelle zu erwarten.
-        Eine Kerbe ermöglicht das Einrasten in Lesegeräte.\\~\\
-
-        Im inneren der Karten sind unter anderem der Flash-Speicher, sowie ein Mikrocontroller zu finden.
-        Letzterer stellt nutzerfreundliche Protokolle zur strukturierten Nutzung des Speichers zur Verfügung.
+        Im inneren sind Flash-Speicher, sowie ein Mikrocontroller zu finden.
       \end{column}
       \begin{column}{.4\linewidth}
         \begin{figure}[!ht]
@@ -159,11 +149,11 @@
 
           \begin{subfigure}{.3\linewidth}
             \includegraphics[width=\linewidth]{media/decapsulated-01.jpg}
-            \caption{\tiny \href{https://commons.wikimedia.org/wiki/File:Decapsulated\_microSD\_memory\_card\_lineup-genuine,\_questionable,\_and\_fake-counterfeit.jpg}{Andrew Huang\\CC BY-SA 3.0}}
+            \caption{\tiny \href{https://commons.wikimedia.org/wiki/File:Decapsulated\_microSD\_memory\_card\_lineup-genuine,\_questionable,\_and\_fake-counterfeit.jpg}{Huang -\\CC BY-SA 3.0}}
           \end{subfigure}\hspace{4em}
           \begin{subfigure}{.3\linewidth}
             \includegraphics[width=\linewidth]{media/decapsulated-02.jpg}
-            \caption{\tiny \href{https://commons.wikimedia.org/wiki/File:SDKarteoffen.jpg}{Fritz Jörn\\CC BY 3.0}}
+            \caption{\tiny \href{https://commons.wikimedia.org/wiki/File:SDKarteoffen.jpg}{Jörn -\\CC BY 3.0}}
           \end{subfigure}
         \end{figure}
       \end{column}
@@ -176,16 +166,14 @@
       Physische Beschreibung\\~\\
 
       Innenleben: Flash-Speicher \& Mikrocontroller.\\
-      nutzerfreundliches Protokoll
+      Letzterer stellt nutzerfreundliche Protokolle zur strukturierten Nutzung des Speichers zur Verfügung.
     }
   \end{frame}
 
   \subsection{Interfaces}%
   \begin{frame}
-    Zur Verbindung des Arduino mit SD-Karten gibt es verschiedene Schnittstellen.
-    Häufig sind Shields mit microSD Anschluss und Breakout-Boards,
-    welche die Kontakte der SD-Karte zur Verfügung stellen und ggf. die Stromstärke regulieren.
-    Durch beide wird die Karte an den SPI-Bus des Arduino angehangen.\\~\\
+    Schnittstellen sind häufig Shields oder Breakout-Boards.\\
+    Durch beide werden Karten an den SPI-Bus angehangen.\\~\\
 
     \begin{figure}[!ht]
       \centering
@@ -208,15 +196,11 @@
   \FramedSection{Software}%
   \subsection{SD-Karte}%
   \begin{frame}
-    Für die Verwendung einer microSD-Karte mit dem Arduino, muss diese gegebenenfalls formatiert werden.
-    Unterstützt werden MBR / DOS oder die kompatible GUID-Partitionstabelle mit FAT16 / FAT32 Dateisystemen\cite{sd-lib}.
+    Zur Verwendung müssen microSD-Karten ggf. formatiert werden.
+    Unterstützt sind MBR / GUID Partitionstabellen mit FAT-16 / 32 Dateisystemen\cite{sd-lib}.\\~\\
 
-    \vspace{2em}
-
-    Nicht integrierte System nutzen häufig SD-Bus, UHS-II Bus, oder PCIe, anstelle von SPI.
-    Dies erlaubt für Karten mit größeren Speichervolumen und höheren Transfergeschwindigkeiten.
-    Für den Arduino ist dies insofern relevant, als diese nicht direkt verfügbar sind.
-    Bestimmte Konfigurationen des SD Standards können nicht verwendet werden\cite{sd-spec_physical-layer}.
+    Es wird auch SD-Bus, UHS-II Bus, oder PCIe, anstelle von SPI verwendet.
+    Bestimmte Konfigurationen des SD Standards können deshalb nicht verwendet werden\cite{sd-spec_physical-layer}.
 
     \note {
       Speichermedium-Formatierung ist ggf. notwendig.\\
@@ -226,40 +210,34 @@
 
   \subsection{SD Library}%
   \begin{frame}
-    Zur Verwendung von SD-Karten findet die SD Library Gebrauch.
-    Sie kann über den Library Manager installiert, und als \enquote{\texttt{SD.h}} eingebunden werden.
-    Zur Kommunikation über den SPI-Bus wird ebenfalls \enquote{\texttt{SPI.h}} benötigt.
+    SD-Library zur Verwendung von SD-Karten.\\
+    Installation per Library Manager, Einbindung als \enquote{\texttt{SD.h}}.
+    Zur Kommunikation per SPI-Bus wird ebenfalls \enquote{\texttt{SPI.h}} benötigt.\\~\\
 
     \note {
       SD Library (\texttt{SD.h} \& \texttt{SPI.h}); Installation in IDE 1.x \& 2.x.
     }
 
-    \vfill
     \begin{figure}[!ht]
-      \centering
-      \begin{subfigure}{.75\linewidth}
+      \centering%
+      \begin{subfigure}{.72\linewidth}
         \includegraphics[width=\linewidth]{media/sd-lib.png}
-        \caption{Arduino IDE 1.8}
-      \end{subfigure}\hspace{1.5em}
-      \begin{subfigure}{.2\linewidth}
+        \caption{Arduino IDE 1.8}%
+      \end{subfigure}\hspace{1.5em}%
+      \begin{subfigure}{.2\linewidth}%
         \includegraphics[width=\linewidth]{media/sd-lib-ide2.png}
         \caption{Arduino IDE 2.0}
       \end{subfigure}
     \end{figure}
-    \begin{center}
-    \end{center}
   \end{frame}
 
   \begin{frame}[fragile]
-    Nach Inklusion von \texttt{SPI.h} \& \texttt{SD.h} kann die programmatische Verwendung der SD-Karte beginnen.\\~\\
-
-    Um die SPI-Verbindung herzustellen, wird die Funktion \enquote{\texttt{SD.begin(int cs)}} verwendet.
-    Ihr Argument, \texttt{cs}, ist der \enquote{Chip-Select Pin} der SPI-Verbindung.
-    \enquote{\texttt{SD.begin()}} liefert einen Boolean. Wahr / 1 bei Erfolg, Falsch / 0 bei Versagen.
-    Dies kann mit einer If-Abfrage abgefangen werden, um den Programmfluss zu ändern, und ggf. den Nutzer zu informieren.
+    Durch \enquote{\texttt{SD.begin(int cs)}} wird die SPI-Verbindung hergestellt \tsec{(\texttt{cs} = \enquote{Chip-Select Pin})}.
+    Dies liefert einen Boolean (1 / 0);\\Per If-Abfrage können Nutzer informiert werden.\\~\\
 
     \note {
-      Inklusion der Header, Herstellung der SPI-Verbindung (Error Handling).
+      Inklusion von \texttt{SPI.h} \& \texttt{SD.h}.\\
+      Herstellung der SPI-Verbindung mit Error Handling.
     }
 
     \lstinputlisting{./media/sketch/sd-setup.ino}
@@ -267,9 +245,8 @@
 
   \begin{frame}[fragile]
     \only<1> {
-      Dateien sind die idiomatischen Container für Daten.\\
-      Um sie zum Lesen und oder Schreiben zu öffnen, wird \enquote{\texttt{SD.open(dateipfad, modus)}} verwendet.
-      Dies liefert das \texttt{File} Objekt, welches für weitere Operationen auf die Datei benötigt wird.
+      Dateien sind idiomatische Container für Daten.\\
+      \enquote{\texttt{SD.open(pfad, modus)}} liefert das \texttt{File} Objekt, welches zur Bearbeitung dieser benötigt wird.
 
       \note {
         Dateien als Container.\\
@@ -278,35 +255,37 @@
     }
 
     \only<2> {
-      Modi beschreiben welche Aktionen auf die Datei ausgeführt werden können, z.B.: \texttt{File\_READ} \& \texttt{FILE\_WRITE}.
-      Diese setzen sich ggf. aus weiteren Attributen zusammen. \texttt{File\_WRITE = (O\_READ | O\_WRITE | O\_CREAT | O\_APPEND)}.
-      Es erlaubt demnach das Lesen, Schreiben, sowie Erstellen von Dateien, falls diese nicht bereits existieren. Es schreibt ans Dateiende.
-      Diese Attribute können auch eigens gesetzt oder entfernt werden.
+      Modi beschreiben welche Aktionen auf die geöffnete Datei ausgeführt werden können:\\~\\
 
       \note {
-        Öffungs-Modi und deren Funktion.
+        Öffungs-Modi und deren Funktion. (FILE\_READ, FILE\_WRITE)\\~\\
+
+        ggf. Attribute (\texttt{FILE\_WRITE} = (\texttt{O\_READ} | \texttt{O\_WRITE} | \texttt{O\_CREAT} | \texttt{O\_APPEND}))\\
+        \enquote{\texttt{uint8\_t const O\_READ = 0X01;}}, \enquote{\texttt{uint8\_t const O\_APPEND = 0X04;}}.\\
+        (\texttt{O\_READ} | \texttt{O\_APPEND} = 0x01 (0b001) | 0x04 (0b100) = 0x05 (0b101))\\
+        (mehr in \texttt{SD.h} \& \texttt{SdFat.h})
       }
     }
 
     \only<3> {
-      Um Inhalte in Dateien zu schreiben, werden die bekannten \texttt{print()} Befehle auf das \texttt{File} Objekt angewandt.
-      \texttt{write()} kann verwendet werden, um Binärdaten zu schreiben. \texttt{read()} ermöglicht das Lesen aus Dateien.
+      Interaktion mit Inhalten durch \texttt{print()}, \texttt{write()}, \texttt{read()} Befehle.\\~\\
 
       \note {
         Schreiben und Lesen von Daten.
       }
     }
 
-    ~\\
+    ~
+
     \lstinputlisting{./media/sketch/sd-file.ino}
   \end{frame}
 
   \begin{frame}
-    Die Bearbeitung des Dateisystems per \enquote{\texttt{SD.h}} ist durch die Funktionen \texttt{open}, \texttt{mkdir()}, \texttt{rmdir()}, \texttt{remove()} möglich.\\~\\
+    Bearbeitung des Dateisystems durch \texttt{open()}, \texttt{mkdir()}, \texttt{rmdir()}, \texttt{remove()}.\\~\\
 
-    Durch Abfragen wie \texttt{exists()}, \texttt{isDirectory()}, \texttt{name()}, können existierende Strukturen ertastet werden.\\~\\
+    Ertastung bestehender Strukturen durch \texttt{exists()}, \texttt{isDirectory()} \& \texttt{name()}.\\~\\
 
-    Per \texttt{open()}, \texttt{openNextFile()}, \texttt{rewindDirectory()} ist das Dateisystem zu navigieren. Beide \enquote{\texttt{open}} Funktionen sind ebenfalls für Ordern geeignet.
+    Navigation via \texttt{open()}, \texttt{openNextFile()}, \texttt{rewindDirectory()}. \tsec{(\enquote{\texttt{open}} Funktionen sind ebenfalls für Ordner geeignet)}
 
     \note {
       Dateisystemmanagement\\~\\
@@ -320,16 +299,13 @@
   \begin{frame}
     \textbf{Obacht:}\\~\\
 
-    Das \texttt{File} Objekt erbt von \texttt{Stream} (Wie auch \texttt{Serial}) und ist somit gepuffert.
-    Änderungen werden nicht direkt, sondern erst bei \texttt{flush} Ereignissen geschrieben.
-    Dies geschieht z.B.: durch die \texttt{flush()} Funktion oder das Schließen einer Datei.
-    Wird nicht geflushed, können Änderungen verloren gehen.\\~\\
+    \texttt{File} ist gepuffert; Es können Änderungen verloren gehen.\\
+    \tsec{Änderungen werden erst bei \texttt{flush} Ereignissen geschrieben.
+    Dies geschieht z.B.: durch \texttt{flush()} oder das Schließen einer Datei.}\\~\\
 
-    Versionsbedingt ist ggf. nur eine Datei an einem Zeitpunkt zu öffnen. Auch das mehrfache Öffnen derselben Datei ist davon betroffen. Das Schließen von Dateien sollte somit nicht vergessen werden.\\~\\
+    Versionsbedingt ist ggf. nur eine Datei an einem Zeitpunkt zu öffnen. Das Schließen sollte nicht vergessen werden.\\~\\
 
-    Unterstützt sind lediglich \href{https://de.wikipedia.org/wiki/8.3}{8.3 Dateinamen} in Großbuchstaben\cite{sd-lib}.\\~\\
-
-    (Gegensätzlich zum \enquote{\texttt{c}} \texttt{FILE}, wird das \texttt{File} Objekt der SD Library bis auf den ersten Buchstaben kleingeschrieben.)
+    \tsec{Unterstützt sind lediglich \href{https://de.wikipedia.org/wiki/8.3}{8.3 Dateinamen} in Großbuchstaben\cite{sd-lib}.}
 
     \note {
       \textbf{Zu beachten:}\\~\\
@@ -345,16 +321,16 @@
   \FramedSection{Beispiel Projekt}%
   \hypertarget{sec:project}{}
   \subsection{Rückblick, Projektbeschreibung}%
-  \againframe<2>{motivation}
+  \againframe<3>{motivation}
 
   \subsection{Konstruktion}%
   \begin{frame}
     \begin{columns}[c]
       \begin{column}{.5\linewidth}
         Auf dem Arduino ist das \enquote{senseBox Shield} montiert.
-        Es stellt eine Echtzeituhr (\href{https://de.wikipedia.org/wiki/Echtzeituhr}{RTC}) und den microSD Anschluss bereit.\\~\\
+        \tsec{Es stellt eine Echtzeituhr (\href{https://de.wikipedia.org/wiki/Echtzeituhr}{RTC}) und den microSD Anschluss bereit.}\\~\\
 
-        Die besagten \enquote{\texttt{HDC100x}} \& \enquote{\texttt{BMP280}} Sensormodule sind auf der Steckplatine montiert und mit dem SPI-Bus des Arduino verbunden.
+        Besagte Sensormodule sind über die Steckplatine an den SPI-Bus angehangen.
       \end{column}
       \begin{column}{.5\linewidth}
         \centering
@@ -371,71 +347,63 @@
 
   \subsection{Speicherformate}%
   \begin{frame}
-    Die Strukturierung der gesammelten Daten ist ein wichtiger Aspekt und bedeutend für die spätere Verarbeitung.
-    Nutzerfreundlich sind textbasierte Formate.
-    Um die Weiterverarbeitung zu erleichtern wird häufig strukturierter Text verwendet.
-    Tabellen artige Strukturen sind gut in CSV darzustellen.
-    Datenserialisierungssprachen eignen sich für komplexere Strukturen, welche Computerlesbar gespeichert werden
-    sollen. Hier findet sich z.B.: XML, YAML, JSON.\\~\\
+    \begin{minipage}{.8\linewidth}
+    Die Strukturierung von Daten ist ein wichtiger Aspekt.\\
+    \tsec{Textbasierte Formate sind nutzerfreundlich; Strukturierung erleichtert die Weiterverarbeitung.}\\~\\
 
-    \href{https://de.wikipedia.org/wiki/Bin\%C3\%A4rdatei}{Binärformate} können wesentlich platzsparender,
-    und dadurch, aber auch durch die nicht notwendige Umwandlungen weniger zeitraubend sein.
-    Das Einlesen dieser auf anderen Systemen kann jedoch deutlich komplizierter sein.
-    Existierende Formate wie Protobuf, BSON können dies erleichtern.
-    Individuelle Formate sind anspruchsvoller, aber nicht selten und bieten mehr Flexibilität.\\~\\
-
-    Zu erwarten, sind ebenfalls menschliche oder technische Fehler.
-    Von Daten, welche einen Wert haben, sollten stets unabhängige Sicherheitskopien existieren.
-    Idealerweise auf mehreren Geräten oder sogar an mehreren Standorten\cite{chervenak-backup}.
+    Menschliche sowie technische Fehler passieren.\\
+    Es sollten stets Sicherheitskopien existieren\cite{chervenak-backup}.
+    \end{minipage}\begin{minipage}{.2\textwidth}
+      \centering
+      \vfill
+      \includegraphics[width=.5\linewidth]{./media/file.pdf}
+      \vfill
+    \end{minipage}
 
     \note{
-      Textbasierte Formate sind Nutzerfreundlich.\\
-      Strukturierter Text ist cool für Computer.\\~\\
-
-      Binärformate sind Kompakt, aber schwer einzulesen.\\
-      Erschwertes Teilen durch fehlende Definition. (entropie ig?)\\
-      Es gibt wohldefinierte Formate\\~\\
+      Textbasierte Formate sind Nutzerfreundlich, Strukturierung cool für Computer.\\~\\
 
       Beispiel Sicherheitskopien:\\
-      \hspace{2em} Jemand löscht aus Versehen den gesamten Datensatz des Projekts, beim Versuch diesen auszuwerten.
+      \hspace{2em} Jemand löscht den gesamten Datensatz des Projekts, beim Versuch diesen auszuwerten.
     }
   \end{frame}
 
   \begin{frame}[fragile]
-    Da eine Reihe wiederholt gemessener Sensoren gut in einer Tabelle dargestellt werden kann, wurde das CSV (RFC 4180) Format gewählt\cite{rfc4180}.\\~\\
+    Es wurde das CSV Format gewählt\footnote{RFC 4180: \enquote{\citetitle{rfc4180}}\cite{rfc4180}.}.\\
+    Als textbasiertes Format Plattform-unabhängig; tabellarisch.\\~\\
 
-    Zeilen sind durch die Zeilenumbruchsequenz \enquote{\texttt{\textbackslash n}} oder \enquote{\texttt{\textbackslash r\textbackslash n}} getrennt.\\
+    Zeilen sind durch den Zeilenumbruch \enquote{\texttt{\textbackslash n}} oder \enquote{\texttt{\textbackslash r\textbackslash n}} getrennt.\\
     Datenfelder / Spalten durch das Komma \enquote{\texttt{,}}.\\~\\
 
     \lstinputlisting[caption={Beispiel CSV-Datei: (\href{https://de.wikipedia.org/w/index.php?title=CSV_(Dateiformat)\&oldid=229431469\#Beispiel}{Wikipedia -- CC BY-SA 3.0})}]{./media/sketch/csv.csv}
 
     \note {
-      Erklärung CSV:\\~\\
+      Wahl von CSV, erklärung:\\~\\
 
-      Tabellarische Darstellung. Trennung durch \enquote{\texttt{,}} \& newline.
+      Textbasiert \& plattform-unabhängig; tabellarisch.\\
+      Trennung durch \enquote{\texttt{,}} \&  Zeilenumbruchsequenz: LF (\texttt{\textbackslash n}) / CR LF (\texttt{\textbackslash r \textbackslash n}).
     }
   \end{frame}
 
   \subsection{Programmierung}
   \begin{frame}[fragile]
-    Alle verwendeten Sensormodule haben einfach zu verwendende Libraries und ähneln sich in ihren Funktionsweisen.
-    Die Libraries werden eingebunden und die Sensoren definiert.\\
+    Libraries werden eingebunden und Sensoren definiert.\\
     \lstinputlisting{./media/sketch/include.ino}
     \note{
       Jeglicher Quelltext ist symbolisch zu Betrachten!\\
       Es sind nur Ausschnitte.\\~\\
 
-      Einbindung der Libraries, Definition \& Initialisierung der Sensoren (immer ähnlich).
+      Einbindung der Libraries, Definition \& Initialisierung der Sensoren (dies und deren Nutzung ist immer ähnlich).
     }
   \end{frame}
 
   \begin{frame}[fragile]
-    In \texttt{setup()} werden die SPI-Verbindungen initialisiert.\\
+    In \texttt{setup()} werden SPI-Verbindungen initialisiert.\\
     \lstinputlisting{./media/sketch/setup.ino}
   \end{frame}
 
   \begin{frame}[fragile]
-    In \texttt{loop()} werden Sensorwerte eingelesen und in den Datalogger gegeben.\\
+    In \texttt{loop()} werden Sensoren eingelesen und in den Logger gegeben.\\
     \lstinputlisting{./media/sketch/loop.ino}
     \note{
       \enquote{logger} ist eine Methode zur Datenaggregation. Jeder Aufruf wird an SD und Serial weitergegeben.
@@ -449,11 +417,9 @@
 
   \subsection{Auswertung}
   \begin{frame}
-    Ein Auswertungsbeispiel der über einen Zeitraum von anderthalb Stunden gesammelten Daten der Wetterstation:\\~\\
+    Auswertungsbeispiel:\\~\\
 
-    Nach Messbeginn wurde ein Fenster für etwa eine halbe Stunde geöffnet, um Variationen hervorzurufen.
-    Dies ist in allen gemessenen Parametern deutlich wiederzuerkennen.
-    Luftdruck scheint in negativer Beziehung zu Temperatur und Luftfeuchtigkeit zu stehen, welche zunächst gesunken sind, sich nach Schließen des Fensters wieder graduell den Ausgangswerten näherten.
+    Luftdruck steht in negativer Beziehung zu Temperatur und Luftfeuchtigkeit, welche zunächst gesunken sind, sich graduell wieder den Ausgangswerten näherten.
 
     \begin{center}
       \includegraphics[width=0.5\textwidth]{media/data.pdf}
@@ -471,7 +437,7 @@
   \section{Epilog}%
   \subsection{Literaturverzeichnis}%
   \begin{frame}
-    \printbibliography
+    \printbibliography[heading=none]
   \end{frame}
 
   \subsection{Weiterführende Literatur}%
@@ -481,19 +447,19 @@
     }
 
     Arduino -- \href{https://docs.arduino.cc/learn/programming/sd-guide}{Guide to Arduino \& Secure Digital (SD) Storage.}~[ENG]\\
-    \hspace{1em} {\footnotesize Artikel mit Beispielen zur Verwendung der SD Library}\\~\\
+    \vspace{-.5ex}\hspace{1em} {\footnotesize Artikel mit Beispielen zur Verwendung der SD Library}\\
 
-    Arduino -- \href{hhttps://www.arduino.cc/reference/en/libraries/sd/}{SD Library}~[ENG]\\
-    \hspace{1em} {\footnotesize Dokumentation der SD Library}\\~\\
+    \vspace{.5ex}Arduino -- \href{hhttps://www.arduino.cc/reference/en/libraries/sd/}{SD Library}~[ENG]\\
+    \vspace{-.5ex}\hspace{1em} {\footnotesize Dokumentation der SD Library}\\
 
-    SD Association -- \href{https://www.sdcard.org/developers/}{SD Standard Overview}~[ENG]\\
-    \hspace{1em} {\footnotesize Weitere Informationen zu SD-Karten}\\~\\
+    \vspace{.5ex}SD Association -- \href{https://www.sdcard.org/developers/}{SD Standard Overview}~[ENG]\\
+    \vspace{-.5ex}\hspace{1em} {\footnotesize Weitere Informationen zu SD-Karten}\\
 
-    David Kriesel -- \href{https://youtu.be/\_Pd5sXXMMLI}{Big Data - mal ganz anders erklärt} \& \href{https://youtu.be/0rb9CfOvojk}{BahnMining - Pünktlichkeit ist eine Zier}\\
-    \hspace{1em} {\footnotesize Beispiele interessanter Datenanalysen}\\~\\
+    \vspace{.5ex}David Kriesel -- \href{https://youtu.be/\_Pd5sXXMMLI}{Big Data - mal ganz anders erklärt} \& \\ \href{https://youtu.be/0rb9CfOvojk}{BahnMining - Pünktlichkeit ist eine Zier}\\
+    \vspace{-.5ex}\hspace{1em} {\footnotesize Beispiele interessanter Datenanalysen}\\
 
-    Dylan Beattie -- \href{https://youtu.be/gd5uJ7Nlvvo}{Plain text}~[ENG]\\
-    \hspace{1em} {\footnotesize Ein Mahnruf zu den Feinheiten der Textkodierung und Lokalisierung in Computersystemen}
+    \vspace{.2ex}Dylan Beattie -- \href{https://youtu.be/gd5uJ7Nlvvo}{Plain text}~[ENG]\\
+    \vspace{-.2ex}\hspace{1em} {\footnotesize Ein Mahnruf zu den Feinheiten der Textkodierung und Lokalisierung in Computersystemen}
   \end{frame}
 
   \subsection{Ausklang}
@@ -501,24 +467,19 @@
     \vfill
       {
         \Large
-        Quelltext des \textcolor{cyan}{\hyperlink{sec:project}{Beispielprogramms~Wetterstation}},
-        und der \href{https://www.latex-project.org/}{\LaTeX} \href{https://ctan.org/pkg/beamer}{BEAMER} Präsentation:\\~\\
-        \hspace{1em} \url{https://github.com/falco-egg/sd-presentation}
+        Quelltext des \textcolor{cyan}{\hyperlink{sec:project}{Beispielprogramms~Wetterstation}},\\
+        und der \href{https://www.latex-project.org/}{\LaTeX} Dokumente (Präsentation \& Handout):\\
+        \hspace{1em} \url{https://github.com/falco-egg/sd-presentation}\\~\\
+
+        Weiteres auf dem dieser Präsentation beigelegtem Handout.
       }
 
       \note {
         Ende der Präsentation :3\\~\\
 
-        Stuff ist auf GitHub.
+        Stuff ist auf GitHub, mehr auf dem Handout.
       }
     \vfill
-    {\doclicenseText \hfill \doclicenseIcon}
+    {\small \doclicenseText \hfill \doclicenseIcon}
   \end{frame}
-
-  \subsection*{Transflash}%
-  \begin{frame}
-    \fullsizegraphic{media/transflash.png}
-    \note{:3 Transflash war die Bezeichung für microSD vor Namensänderung in 2005}
-  \end{frame}
-
 \end{document}

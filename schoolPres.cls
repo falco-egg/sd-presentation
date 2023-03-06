@@ -3,7 +3,7 @@
 
 % --- package setup ---
 
-\LoadClass[10pt,aspectratio=169]{beamer}
+\LoadClass[16pt,aspectratio=169]{beamer}
 
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
@@ -26,7 +26,6 @@
 \RequirePackage{wrapfig}
 \RequirePackage{multicol}
 \RequirePackage[]{listings}
-	
 
 \usetikzlibrary{calc}
 \usetikzlibrary{intersections}
@@ -116,6 +115,11 @@
 \setlength{\TPHorizModule}{1cm}
 \setlength{\TPVertModule}{1cm}
 
+% for secondary text
+\newcommand\tsec[1] {%
+  {\color{lightgray}\hypersetup{allcolors=gray}#1}%
+}
+
 % Place a picture over the slide
 \newcommand<>{\fullsizegraphic}[1]{%
   \begin{textblock}{0}(0,0)%
@@ -127,6 +131,35 @@
       \end{tikzpicture}%
     }%
   \end{textblock}%
+}
+
+\defbeamertemplate*{title page}{customized}[1][]
+{
+	\begin{beamercolorbox}{title}%
+		\vspace{-.5em}%
+		\begin{center}%
+			\usebeamerfont{author}{\insertauthor} -- \usebeamerfont{title}{\inserttitle} (\insertdate)\\
+			\usebeamerfont{subtitle}{\small\insertsubtitle}
+		\end{center}%
+	\end{beamercolorbox}
+}
+
+\setbeamertemplate{section in toc}{%
+  \leavevmode%
+  \hspace{.42\textwidth}
+  \llap{%
+    \hbox to2.25ex{\hfil\usebeamercolor[fg]{structur{structure}e}{\tikz[baseline=-.73ex]{\fill (0,0) circle (.4ex)}\hfil}}
+  }%
+  \kern1.25ex\inserttocsection\par%
+}
+
+\newcommand{\FramedSection}[1]{
+  \section{{#1}}%
+  \begin{frame}%
+    \vfill\begin{beamercolorbox}[sep=12pt, center]{title}%
+      \usebeamerfont{title}{#1}\par%
+    \end{beamercolorbox}\vfill%
+  \end{frame}%
 }
 
 % --- Math stuff ---
