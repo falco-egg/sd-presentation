@@ -7,6 +7,7 @@
   imagemodifier={-eu-80x15},
 ]{doclicense}
 
+% --- Hier können meine Präsentationsnotizen eingeschaltet werden ---
 % \setbeameroption{show only notes} % Only notes
 % \setbeameroption{show notes on second screen=right} % Both
 
@@ -85,7 +86,8 @@
     \end{itemize}
     \note{
       - Nichtflüchtigkeit! (RAM / ROM)\\
-      - Alleinstehend (ohne externe Systeme)
+      - Alleinstehend (ohne externe Systeme)\\
+      - Großes Speichervolumen
     }}
   \end{frame}
 
@@ -162,8 +164,6 @@
     \blfootnote{\citeauthor{sd-spec_physical-layer} -- \enquote{\citetitle{sd-spec_physical-layer}}\cite{sd-spec_physical-layer}.}
     \note {
       Hardware definiert durch spec der SDA; SD Trademark sichert ab.\\~\\
-
-      Physische Beschreibung\\~\\
 
       Innenleben: Flash-Speicher \& Mikrocontroller.\\
       Letzterer stellt nutzerfreundliche Protokolle zur strukturierten Nutzung des Speichers zur Verfügung.
@@ -292,7 +292,7 @@
 
       Ertasten des Dateisystems\\~\\
 
-      Navigierung des Dateisystems
+      Navigation des Dateisystems
     }
   \end{frame}
 
@@ -400,6 +400,10 @@
   \begin{frame}[fragile]
     In \texttt{setup()} werden SPI-Verbindungen initialisiert.\\
     \lstinputlisting{./media/sketch/setup.ino}
+
+     \note {
+       SPI-Verbindung \& Error-Handling
+     }
   \end{frame}
 
   \begin{frame}[fragile]
