@@ -29,7 +29,11 @@ class logger {
     };
 
     ~logger() {
-      sd_close();
+      sdFile.close();
+      if (filename) {
+        delete[] filename;
+        filename = 0;
+      }
     }
 
     template<typename T>
@@ -56,7 +60,7 @@ class logger {
         Serial.flush();
         dump.close();
       }
-      else if (serial) {
+      else {
         Serial.println("couldn't dump log");
       }
 

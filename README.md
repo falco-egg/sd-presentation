@@ -17,14 +17,20 @@ Eine Präsentation zur nichtflüchtigen Datenspeicherung in integrierten Systeme
 Das Beispielprojekt "[Wetterstation](/weather_station)" kann mithilfe der [Arduino Software](https://www.arduino.cc/en/software) gebaut werden.
 Dazu werden außerdem die "Arduino-SD", "Adafruit-HDC1000" und "Adafruit-BMP280" Libraries aus dem Library Manager, sowie die [Watterott electronic RV8523](https://github.com/watterott/Arduino-Libs) Library benötigt.
 
-<h2 align="center">Bau der Präsentation</h2>
+<h2 align="center">Bau der Dokumente</h2>
 
-Die Präsentation ist in LaTeX BEAMER geschrieben.
-Eine TeX Distribution mit `pdflatex`, wie `texlive`, sowie eine Anzahl an [ctan](https://ctan.org/?lang=en) Packeten werden benötigt.
-Zum Bau der Bibliografie wird `biber` verwendet.
+Die Präsentation und das Handout sind in LaTeX geschrieben.
+Eine TeX Distribution wie `texlive`, sowie eine Anzahl an [ctan](https://ctan.org/?lang=en) Packeten werden benötigt.
+Zum Bau der Bibliografie muss ebenfalls `biber` vorhanden sein.
 
 ### linux
 
-GNU `make` baut mit der [Makefile](Makefile) vollautomatisch die Präsentation:
+GNU `make` baut mit der [Makefile](Makefile) vollautomatisch die Präsentation und das Handout als PDF:
 
-`$ make presentation.pdf`
+arch: `pacman -Sy texlive-most biber`  
+debian: `apt install texlive-latex-extra biber` (untested)
+
+```
+$ git clone https://github.com/falco-egg/sd-presentation && cd sd-presentation
+$ make
+```
